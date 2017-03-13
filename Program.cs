@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-
 namespace GoMapsCloudAPI
 {
     public class Program
@@ -11,12 +9,7 @@ namespace GoMapsCloudAPI
         {
             Console.WriteLine("Running GoMaps Cloud API.");
 
-            var config = new ConfigurationBuilder()
-                .AddCommandLine(args)
-                .Build();
-
             var builder = new WebHostBuilder()
-                .UseConfiguration(config)
                 .UseStartup<Startup>()
                 .UseKestrel();
 
