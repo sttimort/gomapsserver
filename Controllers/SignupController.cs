@@ -1,16 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
+using GoMapsCloudAPI.Models;
+using GoMapsCloudAPI.Interfaces;
 
 namespace GoMapsCloudAPI.Controllers
 {
     [Route("[controller]")]
     public class UsersController : Controller
     {
-        [HttpGet("/exists/{user_id}")]
-        public JsonResult doesUserExist(long user_id)
-        {
-            //query data base
+        private IUsersRepository _usersRepository;
 
-            if (/* user exists */ true)
+        public UsersController(IUsersRepository usersRepository)
+        {
+            // _usersRepository = usersRepository;
+        }
+
+        [HttpGet("/exists/{user_id}")]
+        public JsonResult Exists(long user_id)
+        {
+            if (/*_usersRepository.Exists(user_id)*/ true)
                 return Json(new {
                     user_id = user_id,
                     exists = true
@@ -18,18 +25,18 @@ namespace GoMapsCloudAPI.Controllers
 
             // return Json(new {
             //     user_id = user_id,
-            //     exists = true
+            //     exists = false
             // });
         }
 
         [HttpGet("{user_id}")]
-        public string getUserInfo(long user_id)
+        public string GetUserInfo(long user_id)
         {
             return "GET /user/user_id - get user user info";
         }
 
         [HttpPost]
-        public string registerNewUser([FromBody] string user_id)
+        public string RegisterNewUser([FromBody] string user_id)
         {
             return "POST /signup - register new user" + user_id;
         }
