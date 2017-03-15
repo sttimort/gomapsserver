@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ namespace GoMapsCloudAPI.Models
         private UsersContext _db;
         public UsersRepository(UsersContext context)
         {
-
+            _db = context;
         }
         public async Task create(User user)
         {
@@ -22,7 +21,7 @@ namespace GoMapsCloudAPI.Models
             await _db.SaveChangesAsync();
         }
 
-        public bool isExist(int key)
+        public bool Exsists(int key)
         {
             IQueryable foundUsers = _db.Users.Where(p => p.Id == key);
             if (foundUsers == null) return false;
