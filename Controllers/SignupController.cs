@@ -1,37 +1,78 @@
 using Microsoft.AspNetCore.Mvc;
+using GoMapsCloudAPI.Models;
 
 namespace GoMapsCloudAPI.Controllers
 {
     [Route("[controller]")]
     public class UsersController : Controller
     {
-        [HttpGet("/exists/{user_id}")]
-        public JsonResult doesUserExist(long user_id)
-        {
-            //query data base
+        private readonly IUsersRepository _usersRepo;
 
-            if (/* user exists */ true)
-                return Json(new {
+        public UsersController(IUsersRepository usersRepo)
+        {
+            _usersRepo = usersRepo;
+        }
+
+        [HttpGet("/exists/{user_id}")]
+        public IActionResult doesUserExist(long user_id)
+        {
+            if (_usersRepo.Exists(user_id))
+                return Ok(new {
                     user_id = user_id,
                     exists = true
                 });
 
+            return Ok(new {
+                    user_id = user_id,
+                    exists = false
+                });
+
+            // if (_usersRepo.Exists(user_id))
+            //     return Json(new {
+            //         user_id = user_id,
+            //         exists = true
+            //     });
+
             // return Json(new {
             //     user_id = user_id,
-            //     exists = true
+            //     exists = false
             // });
         }
 
         [HttpGet("{user_id}")]
         public string getUserInfo(long user_id)
         {
-            return "GET /user/user_id - get user user info";
+            // User user = _usersRepo.
+
+            // return Json(new {
+            //     user_id = ;
+            return "hello";
         }
 
         [HttpPost]
-        public string registerNewUser([FromBody] string user_id)
+        public ActionResult registerNewUser([FromBody] User user)
         {
-            return "POST /signup - register new user" + user_id;
+            try 
+            {
+                if (user == null)
+                    return BadRequest();
+
+                _usersRepo.Create(user);
+            }
+            catch
+            {
+                return BadRequest(new {
+                    message = "Couldn't register new user"
+                });
+            }
+
+            return Created($"users/{user.user_id}", user);
+        }
+
+        [HttpPost("{id}/photos")]
+        public IActionResult uploadPhotos( long user_id)
+        {
+            return Ok();
         }
     }
 }

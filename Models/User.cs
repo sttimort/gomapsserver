@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GoMapsCloudAPI.Models
 {
     public class User
     {
-        public int Id { get; set; }
-        public String CurrentCity { get; set; }
-        public String BaseCity { get; set; }
+        [Key]
+        [Required]
+        public long user_id { get; set; }
     }
 }

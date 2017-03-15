@@ -7,25 +7,48 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 namespace GoMapsCloudAPI.Models
 {
 
-    public class UsersRepository
+    public class UsersRepository : IUsersRepository
     {
 
         private UsersContext _db;
         public UsersRepository(UsersContext context)
         {
             _db = context;
+            initialize();
         }
-        public async Task create(User user)
+
+        public async Task Create(User user)
         {
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
         }
 
-        public bool Exsists(int key)
+        public bool Exists(long key)
         {
-            IQueryable foundUsers = _db.Users.Where(p => p.Id == key);
-            if (foundUsers == null) return false;
-            else return true;
+            return (_db.Users.Find(key) is null) ? false : true;
+        }
+
+        void initialize()
+        {
+            var user1 = new User
+            {
+                user_id = 111
+            };
+
+            var user2 = new User
+            {
+                user_id = 222
+            };
+
+            var user3 = new User
+            {
+                user_id = 333
+            };
+
+            _db.Add(user1);
+            _db.Add(user2);
+            _db.Add(user3);
+            _db.SaveChanges();
         }
     }
 }
